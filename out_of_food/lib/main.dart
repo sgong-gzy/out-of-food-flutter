@@ -15,18 +15,6 @@ class MyApp extends StatelessWidget {
       // home: MyHomePage(title: 'Shopping list'),
       home: ShoppingList(
       products: <Product>[
-        Product(name: 'Eggs'),
-        Product(name: 'Flour'),
-        Product(name: 'Chocolate chips'),
-        Product(name: 'Eggs'),
-        Product(name: 'Flour'),
-        Product(name: 'Chocolate chips'),
-        Product(name: 'Eggs'),
-        Product(name: 'Flour'),
-        Product(name: 'Chocolate chips'),
-        Product(name: 'Eggs'),
-        Product(name: 'Flour'),
-        Product(name: 'Chocolate chips'),
       ],
     ),
     );
@@ -97,6 +85,18 @@ class ShoppingList extends StatefulWidget {
 
 class _ShoppingListState extends State<ShoppingList> {
   Set<Product> _shoppingCart = Set<Product>();
+  List<Product> _products = List<Product>();
+
+  // Create a text controller. We will use it to retrieve the current value
+  // of the TextField!
+  final myController = TextEditingController();
+
+  @override
+  void dispose() {
+    // Clean up the controller when the Widget is disposed
+    myController.dispose();
+    super.dispose();
+  }
 
   void _handleCartChanged(Product product, bool inCart) {
     setState(() {
@@ -110,6 +110,13 @@ class _ShoppingListState extends State<ShoppingList> {
       else
         _shoppingCart.remove(product);
     });
+  }
+
+  void _addItem() {
+    setState(() {
+      _products.add(Product(name: myController.text));
+    });
+    myController.clear();
   }
 
   @override
@@ -142,19 +149,35 @@ class _ShoppingListState extends State<ShoppingList> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Text(
-                '~ Today I need to buy ~',
+                '~ I need to buy ~',
               ),
               const SizedBox(height: 24.0),
-              TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Add item',
+              Row(children: <Widget>[
+                const SizedBox(width: 12),
+                Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Add item',
+                    ),
+                    controller: myController,
+                  ),
                 ),
+                const SizedBox(width: 12),
+                RaisedButton(
+                  onPressed: _addItem,
+                  child: const Text(
+                    'Submit',
+                    style: TextStyle(fontSize: 20, color: Colors.white)
+                  ),
+                  color: Theme.of(context).accentColor,
+                ),
+                ],
               ),
               const SizedBox(height: 24.0),
               new Expanded(
                 child: ListView(
-                  children: widget.products.map((Product product) {
+                  children: _products.map((Product product) {
                     return ShoppingListItem(
                       product: product,
                       inCart: _shoppingCart.contains(product),
