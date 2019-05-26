@@ -54,6 +54,7 @@ class ShoppingListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      contentPadding: EdgeInsets.symmetric(horizontal: 24.0),
       onTap: () {
         onCartChanged(product, !inCart);
       },
@@ -132,66 +133,65 @@ class _ShoppingListState extends State<ShoppingList> {
       body: SafeArea(
         top: false,
         bottom: false,
-        child: Container(
-          margin: EdgeInsets.all(12.0),
-          padding: EdgeInsets.all(12.0),
-          child: Column(
-            // Column is also layout widget. It takes a list of children and
-            // arranges them vertically. By default, it sizes itself to fit its
-            // children horizontally, and tries to be as tall as its parent.
-            //
-            // Invoke "debug painting" (choose the "Toggle Debug Paint" action
-            // from the Flutter Inspector in Android Studio, or the "Toggle Debug
-            // Paint" command in Visual Studio Code) to see the wireframe for each
-            // widget.
-            //
-            // Column has various properties to control how it sizes itself and
-            // how it positions its children. Here we use mainAxisAlignment to
-            // center the children vertically; the main axis here is the vertical
-            // axis because Columns are vertical (the cross axis would be
-            // horizontal).
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                '~ I need to buy ~',
-              ),
-              const SizedBox(height: 24.0),
-              Row(children: <Widget>[
-                const SizedBox(width: 12),
-                Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Add item',
+        child: Column(
+          // Column is also layout widget. It takes a list of children and
+          // arranges them vertically. By default, it sizes itself to fit its
+          // children horizontally, and tries to be as tall as its parent.
+          //
+          // Invoke "debug painting" (choose the "Toggle Debug Paint" action
+          // from the Flutter Inspector in Android Studio, or the "Toggle Debug
+          // Paint" command in Visual Studio Code) to see the wireframe for each
+          // widget.
+          //
+          // Column has various properties to control how it sizes itself and
+          // how it positions its children. Here we use mainAxisAlignment to
+          // center the children vertically; the main axis here is the vertical
+          // axis because Columns are vertical (the cross axis would be
+          // horizontal).
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.all(24.0),
+              child: Column(children: <Widget>[
+                Text(
+                  '~ I need to buy ~',
+                ),
+                const SizedBox(height: 24.0),
+                Row(children: <Widget>[
+                  Expanded(
+                    child: TextField(
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Add item',
+                      ),
+                      controller: myController,
                     ),
-                    controller: myController,
                   ),
-                ),
-                const SizedBox(width: 12),
-                RaisedButton(
-                  onPressed: _addItem,
-                  child: const Text(
-                    'Submit',
-                    style: TextStyle(fontSize: 20, color: Colors.white)
+                  const SizedBox(width: 12),
+                  RaisedButton(
+                    onPressed: _addItem,
+                    child: const Text(
+                      'Submit',
+                      style: TextStyle(fontSize: 20, color: Colors.white)
+                    ),
+                    color: Theme.of(context).accentColor,
                   ),
-                  color: Theme.of(context).accentColor,
+                  ],
                 ),
-                ],
+              ],),
+            ),
+            new Expanded(
+              child: ListView(
+                children: _products.map((Product product) {
+                  return ShoppingListItem(
+                    product: product,
+                    inCart: _shoppingCart.contains(product),
+                    onCartChanged: _handleCartChanged,
+                  );
+                }).toList(),
               ),
-              const SizedBox(height: 24.0),
-              new Expanded(
-                child: ListView(
-                  children: _products.map((Product product) {
-                    return ShoppingListItem(
-                      product: product,
-                      inCart: _shoppingCart.contains(product),
-                      onCartChanged: _handleCartChanged,
-                    );
-                  }).toList(),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ), //
     );
