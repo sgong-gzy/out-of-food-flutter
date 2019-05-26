@@ -13,10 +13,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'GochiHand',
       ),
       // home: MyHomePage(title: 'Shopping list'),
-      home: ShoppingList(
-      products: <Product>[
-      ],
-    ),
+      home: ShoppingList(),
     );
   }
 }
@@ -70,9 +67,7 @@ class ShoppingListItem extends StatelessWidget {
 }
 
 class ShoppingList extends StatefulWidget {
-  ShoppingList({Key key, this.products}) : super(key: key);
-
-  final List<Product> products;
+  ShoppingList({Key key}) : super(key: key);
 
   // The framework calls createState the first time a widget appears at a given
   // location in the tree. If the parent rebuilds and uses the same type of
@@ -95,6 +90,7 @@ class _ShoppingListState extends State<ShoppingList> {
   void dispose() {
     // Clean up the controller when the Widget is disposed
     myController.dispose();
+
     super.dispose();
   }
 
@@ -113,10 +109,14 @@ class _ShoppingListState extends State<ShoppingList> {
   }
 
   void _addItem() {
+    if (myController.text.isEmpty) {
+      return;
+    }
     setState(() {
       _products.add(Product(name: myController.text));
     });
     myController.clear();
+    // FocusScope.of(context).requestFocus(new FocusNode());
   }
 
   @override
@@ -190,60 +190,6 @@ class _ShoppingListState extends State<ShoppingList> {
           ),
         ),
       ), //
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-      ),
-      body: SafeArea(
-        top: false,
-        bottom: false,
-        child: Container(
-          margin: EdgeInsets.all(16.0),
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            // Column is also layout widget. It takes a list of children and
-            // arranges them vertically. By default, it sizes itself to fit its
-            // children horizontally, and tries to be as tall as its parent.
-            //
-            // Invoke "debug painting" (choose the "Toggle Debug Paint" action
-            // from the Flutter Inspector in Android Studio, or the "Toggle Debug
-            // Paint" command in Visual Studio Code) to see the wireframe for each
-            // widget.
-            //
-            // Column has various properties to control how it sizes itself and
-            // how it positions its children. Here we use mainAxisAlignment to
-            // center the children vertically; the main axis here is the vertical
-            // axis because Columns are vertical (the cross axis would be
-            // horizontal).
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                '~ Today I need to buy ~',
-              ),
-              TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Add item',
-                ),
-              )
-            ],
-          ),
-        ),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
