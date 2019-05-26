@@ -115,7 +115,11 @@ class _ShoppingListState extends State<ShoppingList> {
     setState(() {
       _products.add(Product(name: myController.text));
     });
-    myController.clear();
+    myController.value = myController.value.copyWith(
+      text: '',
+      selection: TextSelection(baseOffset: 0, extentOffset: 0),
+      composing: TextRange.empty,
+    );
     // FocusScope.of(context).requestFocus(new FocusNode());
   }
 
